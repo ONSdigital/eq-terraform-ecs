@@ -1,0 +1,20 @@
+[
+  {
+    "name": "survey-launcher",
+    "image": "onsdigital/go-launch-a-survey",
+    "memoryReservation": 128,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 8000,
+        "hostPort": 0
+      }
+    ],
+    "environment": [
+      {
+        "name": "SURVEY_RUNNER_URL",
+        "value": "${SURVEY_RUNNER_URL}"
+      }
+    ]
+  }
+]
