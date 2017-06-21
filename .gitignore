@@ -1,0 +1,7 @@
+rendered
+tmp
+.idea
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars
+*.pem
