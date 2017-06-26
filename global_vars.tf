@@ -79,3 +79,15 @@ variable "dns_zone_name" {
 variable "certificate_arn" {
   description = "ARN of the IAM loaded TLS certificate for public ELB"
 }
+
+
+# survey-launcher
+variable "jwt_encryption_key_path" {
+  description = "Path to the JWT Encryption Key (PEM format)"
+  default     = "jwt-test-keys/sdc-user-authentication-encryption-sr-public-key.pem"
+}
+
+variable "jwt_signing_key_path" {
+  description = "Path to the JWT Signing Key (PEM format)"
+  default     = "jwt-test-keys/sdc-user-authentication-signing-rrm-private-key.pem"
+}
