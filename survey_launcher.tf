@@ -42,12 +42,19 @@ data "template_file" "survey_launcher" {
 
   vars {
     SURVEY_RUNNER_URL = "https://${var.env}-surveys.${var.dns_zone_name}"
+    JWT_ENCRYPTION_KEY_PATH = "${var.jwt_encryption_key_path}"
+    JWT_SIGNING_KEY_PATH = "${var.jwt_signing_key_path}"
   }
 }
 
 resource "aws_ecs_task_definition" "survey_launcher" {
   family                = "${var.env}-survey-launcher"
   container_definitions = "${data.template_file.survey_launcher.rendered}"
+
+  volume {
+    name      = "survey-launcher-secrets"
+    host_path = "/efs/secrets/survey-launcher"
+  }
 }
 
 resource "aws_ecs_service" "survey_launcher" {
@@ -55,7 +62,7 @@ resource "aws_ecs_service" "survey_launcher" {
   name            = "${var.env}-survey-launcher"
   cluster         = "${aws_ecs_cluster.eq.id}"
   task_definition = "${aws_ecs_task_definition.survey_launcher.arn}"
-  desired_count   = 3
+  desired_count   = 1
   iam_role        = "${aws_iam_role.survey_launcher.arn}"
 
   load_balancer {
