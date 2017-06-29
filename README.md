@@ -32,5 +32,9 @@ terraform apply -var "env=XXX" \
                 -var "vpc_id=XXX" \
                 -var "public_subnet_ids=XXX" \
                 -var "ecs_application_cidrs=XXX" \
-                -var "private_route_table_ids=XXX"
+                -var "private_route_table_ids=XXX" \
+                -var "s3_secrets_bucket=XXX" \
+                -var "jwt_encryption_key_path=XXX" \
+                -var "jwt_signing_key_path=XXX"
+                -var "survey_launcher_tag=latest"
 ```

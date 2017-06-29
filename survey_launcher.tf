@@ -42,12 +42,18 @@ data "template_file" "survey_launcher" {
 
   vars {
     SURVEY_RUNNER_URL = "https://${var.env}-surveys.${var.dns_zone_name}"
+    JWT_ENCRYPTION_KEY_PATH = "${var.jwt_encryption_key_path}"
+    JWT_SIGNING_KEY_PATH = "${var.jwt_signing_key_path}"
+    SECRETS_S3_BUCKET = "${var.s3_secrets_bucket}"
+    LOG_GROUP = "${aws_cloudwatch_log_group.survey_launcher.name}"
+    CONTAINER_TAG = "${var.survey_launcher_tag}"
   }
 }
 
 resource "aws_ecs_task_definition" "survey_launcher" {
   family                = "${var.env}-survey-launcher"
   container_definitions = "${data.template_file.survey_launcher.rendered}"
+  task_role_arn         = "${aws_iam_role.survey_launcher_task.arn}"
 }
 
 resource "aws_ecs_service" "survey_launcher" {
@@ -55,7 +61,7 @@ resource "aws_ecs_service" "survey_launcher" {
   name            = "${var.env}-survey-launcher"
   cluster         = "${aws_ecs_cluster.eq.id}"
   task_definition = "${aws_ecs_task_definition.survey_launcher.arn}"
-  desired_count   = 3
+  desired_count   = 1
   iam_role        = "${aws_iam_role.survey_launcher.arn}"
 
   load_balancer {
@@ -100,4 +106,55 @@ resource "aws_iam_role_policy" "survey_launcher" {
   name = "${var.env}_iam_for_survey_launcher"
   role = "${aws_iam_role.survey_launcher.id}"
   policy = "${data.aws_iam_policy_document.survey_launcher.json}"
+}
+
+
+resource "aws_iam_role" "survey_launcher_task" {
+  name = "${var.env}_iam_for_survey_launcher_task"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": ["ecs-tasks.amazonaws.com"]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+data "aws_iam_policy_document" "survey_launcher_task" {
+  "statement" = {
+    "effect" = "Allow"
+
+    "actions" = [
+      "s3:GetObject",
+      "s3:ListObjects",
+      "s3:ListBucket"
+    ]
+
+    "resources" = [
+      "arn:aws:s3:::${var.s3_secrets_bucket}",
+      "arn:aws:s3:::${var.s3_secrets_bucket}/*",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "survey_launcher_task" {
+  name = "${var.env}_iam_for_survey_launcher_task"
+  role = "${aws_iam_role.survey_launcher_task.id}"
+  policy = "${data.aws_iam_policy_document.survey_launcher_task.json}"
+}
+
+resource "aws_cloudwatch_log_group" "survey_launcher" {
+  name = "${var.env}-survey-launcher"
+
+  tags {
+    Environment = "${var.env}"
+  }
 }

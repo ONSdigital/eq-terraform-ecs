@@ -50,7 +50,16 @@ data "aws_iam_policy_document" "eq_ecs" {
       ]
     }
 
-
+  "statement" = {
+      "effect" = "Allow",
+      "actions" = [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "resources" = [
+        "*"
+      ]
+    }
 }
 
 resource "aws_iam_role_policy" "eq_ecs" {
