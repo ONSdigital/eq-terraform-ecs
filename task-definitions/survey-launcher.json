@@ -1,7 +1,7 @@
 [
   {
     "name": "survey-launcher",
-    "image": "onsdigital/go-launch-a-survey",
+    "image": "onsdigital/go-launch-a-survey:${CONTAINER_TAG}",
     "memoryReservation": 128,
     "essential": true,
     "portMappings": [
@@ -14,7 +14,26 @@
       {
         "name": "SURVEY_RUNNER_URL",
         "value": "${SURVEY_RUNNER_URL}"
+      },
+      {
+        "name": "JWT_ENCRYPTION_KEY_PATH",
+        "value": "${JWT_ENCRYPTION_KEY_PATH}"
+      },
+      {
+        "name": "JWT_SIGNING_KEY_PATH",
+        "value": "${JWT_SIGNING_KEY_PATH}"
+      },
+      {
+        "name": "SECRETS_S3_BUCKET",
+        "value": "${SECRETS_S3_BUCKET}"
       }
-    ]
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "eu-west-1",
+        "awslogs-group": "${LOG_GROUP}"
+      }
+    }
   }
 ]
