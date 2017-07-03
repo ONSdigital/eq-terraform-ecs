@@ -80,7 +80,7 @@ variable "certificate_arn" {
   description = "ARN of the IAM loaded TLS certificate for public ELB"
 }
 
-# survey-launcher
+# Survey Launcher
 variable "survey_launcher_tag" {
   description = "The tag for the Survey Launcher image to run"
   default = "latest"
@@ -96,4 +96,8 @@ variable "jwt_encryption_key_path" {
 
 variable "jwt_signing_key_path" {
   description = "Path to the JWT Signing Key (PEM format)"
+}
+
+variable "survey_runner_url" {
+  description = "The base URL of Survey Runner to redirect to"
 }

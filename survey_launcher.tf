@@ -41,7 +41,7 @@ data "template_file" "survey_launcher" {
   template = "${file("${path.module}/task-definitions/survey-launcher.json")}"
 
   vars {
-    SURVEY_RUNNER_URL = "https://${var.env}-surveys.${var.dns_zone_name}"
+    SURVEY_RUNNER_URL = "${var.survey_runner_url}"
     JWT_ENCRYPTION_KEY_PATH = "${var.jwt_encryption_key_path}"
     JWT_SIGNING_KEY_PATH = "${var.jwt_signing_key_path}"
     SECRETS_S3_BUCKET = "${var.s3_secrets_bucket}"
