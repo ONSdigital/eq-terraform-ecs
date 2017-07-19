@@ -18,7 +18,7 @@ resource "aws_security_group" "eq_alb" {
   }
 
   tags {
-    Name = "${var.env}-eq-alb-access"
+    Name        = "${var.env}-eq-alb-access"
     Environment = "${var.env}"
   }
 }
@@ -43,7 +43,7 @@ resource "aws_security_group" "eq_ecs" {
   }
 
   tags {
-    Name = "${var.env}-eq-ecs-access"
+    Name        = "${var.env}-eq-ecs-access"
     Environment = "${var.env}"
   }
 }

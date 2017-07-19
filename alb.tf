@@ -5,7 +5,7 @@ resource "aws_alb" "eq" {
   subnets         = ["${var.public_subnet_ids}"]
 
   tags {
-    Name = "survey-runner-alb"
+    Name        = "survey-runner-alb"
     Environment = "${var.env}"
   }
 }
@@ -18,7 +18,14 @@ resource "aws_alb_listener" "eq" {
   certificate_arn   = "${var.certificate_arn}"
 
   default_action {
-    target_group_arn = "${aws_alb_target_group.survey_launcher.arn}"
+    target_group_arn = "${aws_alb_target_group.default_target_group.arn}"
     type             = "forward"
   }
+}
+
+resource "aws_alb_target_group" "default_target_group" {
+  name     = "${var.env}-default-target-group"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = "${var.vpc_id}"
 }
