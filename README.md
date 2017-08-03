@@ -17,7 +17,6 @@ module "survey-runner-ecs" {
   public_subnet_ids = "${module.survey-runner-routing.public_subnet_ids}"
   ecs_application_cidrs = "${var.ecs_application_cidrs}"
   private_route_table_ids = "${module.survey-runner-routing.private_route_table_ids}"
-  survey_runner_url = "https://${var.env}-surveys.${var.dns_zone_name}"
 }
 ```
 
@@ -34,10 +33,5 @@ terraform apply -var "env=XXX" \
                 -var "public_subnet_ids=XXX" \
                 -var "ecs_application_cidrs=XXX" \
                 -var "private_route_table_ids=XXX" \
-                -var "s3_secrets_bucket=XXX" \
-                -var "jwt_encryption_key_path=XXX" \
-                -var "jwt_signing_key_path=XXX" \
-                -var "survey_launcher_tag=latest" \
                 -var "private_route_table_ids=XXX" \
-                -var "survey_runner_url=XXX"
 ```

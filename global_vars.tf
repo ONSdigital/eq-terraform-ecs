@@ -18,7 +18,7 @@ variable "availability_zones" {
 
 variable "ecs_instance_type" {
   description = "ECS Instance Type"
-  default     = "t2.nano"
+  default     = "t2.medium"
 }
 
 variable "ecs_aws_key_pair" {
@@ -28,17 +28,12 @@ variable "ecs_aws_key_pair" {
 
 variable "ecs_cluster_min_size" {
   description = "ECS Cluster Minimum number of instances"
-  default     = "1"
+  default     = "3"
 }
 
 variable "ecs_cluster_max_size" {
   description = "ECS Cluster Maximum number of instances"
-  default     = "3"
-}
-
-variable "ecs_cluster_desired_size" {
-  description = "ECS Cluster Desired number of instances"
-  default     = "1"
+  default     = "24"
 }
 
 variable "vpc_id" {
@@ -46,7 +41,7 @@ variable "vpc_id" {
 }
 
 variable "public_subnet_ids" {
-  type = "list"
+  type        = "list"
   description = "The IDs of the public subnets for the external ELBs"
 }
 
@@ -61,7 +56,7 @@ variable "ecs_application_cidrs" {
 }
 
 variable "private_route_table_ids" {
-  type = "list"
+  type        = "list"
   description = "Route tables with route to NAT gateway"
 }
 
@@ -78,26 +73,4 @@ variable "dns_zone_name" {
 
 variable "certificate_arn" {
   description = "ARN of the IAM loaded TLS certificate for public ELB"
-}
-
-# Survey Launcher
-variable "survey_launcher_tag" {
-  description = "The tag for the Survey Launcher image to run"
-  default = "latest"
-}
-
-variable "s3_secrets_bucket" {
-  description = "The S3 bucket that contains the secrets"
-}
-
-variable "jwt_encryption_key_path" {
-  description = "Path to the JWT Encryption Key (PEM format)"
-}
-
-variable "jwt_signing_key_path" {
-  description = "Path to the JWT Signing Key (PEM format)"
-}
-
-variable "survey_runner_url" {
-  description = "The base URL of Survey Runner to redirect to"
 }
