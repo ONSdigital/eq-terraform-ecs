@@ -10,8 +10,6 @@ module "survey-runner-ecs" {
   env = "${var.env}"
   aws_access_key = "${var.aws_access_key}"
   aws_secret_key = "${var.aws_secret_key}"
-  dns_zone_id = "${var.dns_zone_id}"
-  dns_zone_name = "${var.dns_zone_name}"
   certificate_arn = "${var.certificate_arn}"
   vpc_id = "${module.survey-runner-vpc.vpc_id}"
   public_subnet_ids = "${module.survey-runner-routing.public_subnet_ids}"
@@ -26,8 +24,6 @@ To run this module on its own run the following code. (Replacing 'XXX' with you 
 terraform apply -var "env=XXX" \
                 -var "aws_access_key=XXX" \
                 -var "aws_secret_key=XXX" \
-                -var "dns_zone_id=XXX" \
-                -var "dns_zone_name=XXX" \
                 -var "certificate_arn=XXX" \
                 -var "vpc_id=XXX" \
                 -var "public_subnet_ids=XXX" \
