@@ -60,17 +60,6 @@ variable "private_route_table_ids" {
   description = "Route tables with route to NAT gateway"
 }
 
-# DNS
-variable "dns_zone_id" {
-  description = "Amazon Route53 DNS zone identifier"
-  default     = "Z2XIERRF1SJEYP"
-}
-
-variable "dns_zone_name" {
-  description = "Amazon Route53 DNS zone name"
-  default     = "eq.ons.digital."
-}
-
 variable "certificate_arn" {
   description = "ARN of the IAM loaded TLS certificate for public ELB"
 }
