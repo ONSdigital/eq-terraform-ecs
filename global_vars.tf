@@ -63,3 +63,8 @@ variable "private_route_table_ids" {
 variable "certificate_arn" {
   description = "ARN of the IAM loaded TLS certificate for public ELB"
 }
+
+variable "auto_deploy_updated_tags" {
+  description = "Automatically deploy images when tags updated"
+  default     = false
+}
