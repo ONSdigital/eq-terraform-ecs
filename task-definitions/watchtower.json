@@ -1,0 +1,21 @@
+[
+  {
+    "name": "watchtower",
+    "image": "centurylink/watchtower",
+    "memoryReservation": 128,
+    "essential": true,
+    "mountPoints": [
+      {
+        "sourceVolume": "docker",
+        "containerPath": "/var/run/docker.sock"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "eu-west-1",
+        "awslogs-group": "${LOG_GROUP}"
+      }
+    }
+  }
+]
