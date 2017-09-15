@@ -9,3 +9,8 @@ provider "aws" {
 }
 
 data "aws_caller_identity" "current" {}
+
+data "aws_subnet" "public_subnet" {
+  count = 3
+  id    = "${var.public_subnet_ids[count.index]}"
+}

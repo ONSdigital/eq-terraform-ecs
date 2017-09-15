@@ -46,8 +46,9 @@ variable "public_subnet_ids" {
 }
 
 variable "vpc_peer_cidr_block" {
+  type        = "list"
   description = "The CIDR block of the peered VPC, optional"
-  default     = "0.0.0.0/0"
+  default = []
 }
 
 variable "ecs_application_cidrs" {
@@ -58,6 +59,12 @@ variable "ecs_application_cidrs" {
 variable "private_route_table_ids" {
   type        = "list"
   description = "Route tables with route to NAT gateway"
+}
+
+variable "ons_access_ips" {
+  type        = "list"
+  description = "List of IP's or IP ranges to allow access from ONS"
+  default = []
 }
 
 variable "certificate_arn" {

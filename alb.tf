@@ -1,7 +1,7 @@
 resource "aws_alb" "eq" {
   name            = "${var.env}-eq-alb"
   internal        = false
-  security_groups = ["${aws_security_group.eq_alb.id}"]
+  security_groups = ["${join("", aws_security_group.eq_alb_waf_access.*.id)}", "${join("", aws_security_group.eq_alb_ons_access.*.id)}"]
   subnets         = ["${var.public_subnet_ids}"]
 
   tags {
