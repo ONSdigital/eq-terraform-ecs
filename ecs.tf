@@ -16,7 +16,7 @@ resource "aws_launch_configuration" "ecs" {
   instance_type        = "${var.ecs_instance_type}"
   key_name             = "${var.ecs_aws_key_pair}"
   iam_instance_profile = "${aws_iam_instance_profile.eq_ecs.id}"
-  security_groups      = ["${aws_security_group.eq_ecs.id}"]
+  security_groups      = ["${aws_security_group.eq_ecs_alb_access.id}"]
   user_data            = "${data.template_file.ecs_user_data.rendered}"
 
   lifecycle {
