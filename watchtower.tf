@@ -1,4 +1,5 @@
 data "template_file" "watchtower" {
+  count    = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
   template = "${file("${path.module}/task-definitions/watchtower.json")}"
 
   vars {
@@ -7,6 +8,7 @@ data "template_file" "watchtower" {
 }
 
 resource "aws_ecs_task_definition" "watchtower" {
+  count                 = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
   family                = "${var.env}-watchtower"
   container_definitions = "${data.template_file.watchtower.rendered}"
 
@@ -18,13 +20,15 @@ resource "aws_ecs_task_definition" "watchtower" {
 
 resource "aws_ecs_service" "watchtower" {
   name            = "${var.env}-watchtower"
+  count           = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
   cluster         = "${aws_ecs_cluster.eq.id}"
   task_definition = "${aws_ecs_task_definition.watchtower.family}"
-  desired_count   = "${(var.auto_deploy_updated_tags == false ? 0 : var.ecs_cluster_min_size)}"
+  desired_count   = "${var.ecs_cluster_min_size}"
 }
 
 resource "aws_cloudwatch_log_group" "watchtower" {
-  name = "${var.env}-watchtower"
+  name  = "${var.env}-watchtower"
+  count = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
 
   tags {
     Environment = "${var.env}"
