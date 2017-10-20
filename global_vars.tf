@@ -21,6 +21,11 @@ variable "ecs_instance_type" {
   default     = "t2.medium"
 }
 
+variable "ecs_instance_storage_size" {
+  description = "The root block storage size (in GB) of the EC2 instance"
+  default     = 100
+}
+
 variable "ecs_aws_key_pair" {
   description = "Amazon Web Service Key Pair for use by ecs - in production this value should be empty"
   default     = ""

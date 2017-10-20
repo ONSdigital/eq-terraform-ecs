@@ -10,14 +10,33 @@ data "template_file" "ecs_user_data" {
   }
 }
 
+data "aws_ami" "amazon_ecs_ami" {
+  most_recent = true
+
+  filter {
+    name   = "owner-alias"
+    values = ["amazon"]
+  }
+
+  name_regex = ".+-amazon-ecs-optimized$"
+
+  most_recent = true
+}
+
+
 resource "aws_launch_configuration" "ecs" {
   name_prefix          = "${var.env}-eq-ecs-"
-  image_id             = "ami-175f1964"                                 // Amazon ECS-Optimized AMI (see: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html)
+  image_id             = "${data.aws_ami.amazon_ecs_ami.id}"
   instance_type        = "${var.ecs_instance_type}"
   key_name             = "${var.ecs_aws_key_pair}"
   iam_instance_profile = "${aws_iam_instance_profile.eq_ecs.id}"
   security_groups      = ["${aws_security_group.eq_ecs_alb_access.id}"]
   user_data            = "${data.template_file.ecs_user_data.rendered}"
+
+  root_block_device {
+    volume_type = "gp2"
+    volume_size = "${var.ecs_instance_storage_size}"
+  }
 
   lifecycle {
     create_before_destroy = true
