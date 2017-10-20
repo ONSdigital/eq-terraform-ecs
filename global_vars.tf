@@ -66,6 +66,11 @@ variable "private_route_table_ids" {
   description = "Route tables with route to NAT gateway"
 }
 
+variable "eq_gateway_ips" {
+  type        = "list"
+  description = "A list of External IP addresses for the EQ services"
+}
+
 variable "ons_access_ips" {
   type        = "list"
   description = "List of IP's or IP ranges to allow access from ONS"

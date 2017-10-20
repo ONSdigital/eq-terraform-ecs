@@ -50,6 +50,24 @@ resource "aws_security_group" "eq_alb_ons_access" {
   }
 }
 
+resource "aws_security_group" "eq_alb_ecs_access" {
+  name        = "${var.env}-eq-alb-access-from-ecs"
+  description = "Allow access to ALB from the ECS cluster"
+  vpc_id      = "${var.vpc_id}"
+
+  ingress {
+    from_port   = "443"
+    to_port     = "443"
+    protocol    = "tcp"
+    cidr_blocks = ["${formatlist("%s/32", var.eq_gateway_ips)}"]
+  }
+
+  tags {
+    Name        = "${var.env}-eq-ecs"
+    Environment = "${var.env}"
+  }
+}
+
 resource "aws_security_group" "eq_ecs_alb_access" {
   name        = "${var.env}-eq-ecs-access-from-alb"
   description = "Allow access from ALB in public subnets"
