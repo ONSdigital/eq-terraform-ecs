@@ -4,6 +4,7 @@ data "template_file" "watchtower" {
 
   vars {
     LOG_GROUP = "${aws_cloudwatch_log_group.watchtower.name}"
+    CONTAINERS = ["${var.env}-go-launch-a-survey"]
   }
 }
 

@@ -2,6 +2,7 @@
   {
     "name": "watchtower",
     "image": "centurylink/watchtower",
+    "command": "${CONTAINERS}",
     "memoryReservation": 128,
     "essential": true,
     "mountPoints": [
