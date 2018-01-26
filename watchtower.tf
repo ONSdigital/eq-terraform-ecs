@@ -4,7 +4,6 @@ data "template_file" "watchtower" {
 
   vars {
     LOG_GROUP = "${aws_cloudwatch_log_group.watchtower.name}"
-    CONTAINERS = "${var.env}-go-launch-a-survey"
   }
 }
 
@@ -12,6 +11,7 @@ resource "aws_ecs_task_definition" "watchtower" {
   count                 = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
   family                = "${var.env}-watchtower"
   container_definitions = "${data.template_file.watchtower.rendered}"
+  task_role_arn         = "${aws_iam_role.watchtower.arn}"
 
   volume {
     name      = "docker"
@@ -34,4 +34,47 @@ resource "aws_cloudwatch_log_group" "watchtower" {
   tags {
     Environment = "${var.env}"
   }
+}
+
+resource "aws_iam_role" "watchtower" {
+  name = "${var.env}_iam_instance_profile_for_watchtower"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": ["ecs.amazonaws.com", "ec2.amazonaws.com"]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+data "aws_iam_policy_document" "watchtower" {
+
+  "statement" = {
+    "effect" = "Allow"
+
+    "actions" = [
+      "ecr:GetAuthorizationToken",
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer",
+    ]
+
+    "resources" = [
+      "*",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "watchtower" {
+  name   = "${var.env}_iam_instance_profile_for_watchtower"
+  role   = "${aws_iam_role.watchtower.id}"
+  policy = "${data.aws_iam_policy_document.watchtower.json}"
 }
