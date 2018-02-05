@@ -45,7 +45,6 @@ resource "aws_launch_configuration" "ecs" {
 
 resource "aws_autoscaling_group" "eq_ecs" {
   name                 = "${var.env}-eq-ecs"
-  availability_zones   = ["${var.availability_zones}"]
   launch_configuration = "${aws_launch_configuration.ecs.name}"
   vpc_zone_identifier  = ["${aws_subnet.ecs_application.*.id}"]
   min_size             = "${var.ecs_cluster_min_size}"
