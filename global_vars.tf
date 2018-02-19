@@ -83,5 +83,5 @@ variable "certificate_arn" {
 
 variable "auto_deploy_updated_tags" {
   description = "Automatically deploy images when tags updated"
-  default     = false
+  default     = "false"
 }
