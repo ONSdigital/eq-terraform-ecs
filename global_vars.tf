@@ -18,7 +18,7 @@ variable "availability_zones" {
 
 variable "ecs_instance_type" {
   description = "ECS Instance Type"
-  default     = "t2.medium"
+  default     = "c5.xlarge"
 }
 
 variable "ecs_instance_storage_size" {
