@@ -9,7 +9,7 @@ data "template_file" "watchtower" {
 
 resource "aws_ecs_task_definition" "watchtower" {
   count                 = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
-  family                = "${var.env}-watchtower"
+  family                = "${var.env}-${var.ecs_cluster_name}-watchtower"
   container_definitions = "${data.template_file.watchtower.rendered}"
 
   volume {
@@ -19,15 +19,15 @@ resource "aws_ecs_task_definition" "watchtower" {
 }
 
 resource "aws_ecs_service" "watchtower" {
-  name            = "${var.env}-watchtower"
+  name            = "${var.env}-${var.ecs_cluster_name}-watchtower"
   count           = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
-  cluster         = "${aws_ecs_cluster.eq.id}"
+  cluster         = "${aws_ecs_cluster.default.id}"
   task_definition = "${aws_ecs_task_definition.watchtower.family}"
   desired_count   = "${var.ecs_cluster_min_size}"
 }
 
 resource "aws_cloudwatch_log_group" "watchtower" {
-  name  = "${var.env}-watchtower"
+  name  = "${var.env}-${var.ecs_cluster_name}-watchtower"
   count = "${(var.auto_deploy_updated_tags == false ? 0 : 1)}"
 
   tags {

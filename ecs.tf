@@ -1,12 +1,12 @@
-resource "aws_ecs_cluster" "eq" {
-  name = "${var.env}-eq"
+resource "aws_ecs_cluster" "default" {
+  name = "${var.env}-${var.ecs_cluster_name}"
 }
 
 data "template_file" "ecs_user_data" {
   template = "${file("${path.module}/templates/ecs_launch_config.tpl")}"
 
   vars {
-    ECS_CLUSTER = "${aws_ecs_cluster.eq.name}"
+    ECS_CLUSTER = "${aws_ecs_cluster.default.name}"
   }
 }
 
@@ -20,17 +20,16 @@ data "aws_ami" "amazon_ecs_ami" {
 
   name_regex = ".+-amazon-ecs-optimized$"
 
-  most_recent = true
 }
 
 
 resource "aws_launch_configuration" "ecs" {
-  name_prefix          = "${var.env}-eq-ecs-"
+  name_prefix          = "${var.env}-${var.ecs_cluster_name}-ecs-"
   image_id             = "${data.aws_ami.amazon_ecs_ami.id}"
   instance_type        = "${var.ecs_instance_type}"
   key_name             = "${var.ecs_aws_key_pair}"
-  iam_instance_profile = "${aws_iam_instance_profile.eq_ecs.id}"
-  security_groups      = ["${aws_security_group.eq_ecs_alb_access.id}"]
+  iam_instance_profile = "${aws_iam_instance_profile.ecs.id}"
+  security_groups      = ["${aws_security_group.ecs_alb_access.id}"]
   user_data            = "${data.template_file.ecs_user_data.rendered}"
 
   root_block_device {
@@ -43,8 +42,8 @@ resource "aws_launch_configuration" "ecs" {
   }
 }
 
-resource "aws_autoscaling_group" "eq_ecs" {
-  name                 = "${var.env}-eq-ecs"
+resource "aws_autoscaling_group" "ecs" {
+  name                 = "${var.env}-${var.ecs_cluster_name}-ecs"
   launch_configuration = "${aws_launch_configuration.ecs.name}"
   vpc_zone_identifier  = ["${aws_subnet.ecs_application.*.id}"]
   min_size             = "${var.ecs_cluster_min_size}"
@@ -63,14 +62,14 @@ resource "aws_autoscaling_group" "eq_ecs" {
 
   tag {
     key                 = "Name"
-    value               = "${var.env}-eq-ecs"
+    value               = "${var.env}-${var.ecs_cluster_name}-ecs"
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_policy" "eq_ecs_scaling" {
-  name                      = "${var.env}-eq-ecs-scaling"
-  autoscaling_group_name    = "${aws_autoscaling_group.eq_ecs.name}"
+resource "aws_autoscaling_policy" "ecs_scaling" {
+  name                      = "${var.env}-${var.ecs_cluster_name}-ecs-scaling"
+  autoscaling_group_name    = "${aws_autoscaling_group.ecs.name}"
   adjustment_type           = "ChangeInCapacity"
   policy_type               = "StepScaling"
   estimated_instance_warmup = "30"

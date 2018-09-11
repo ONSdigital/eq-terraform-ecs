@@ -1,10 +1,10 @@
-resource "aws_iam_instance_profile" "eq_ecs" {
-  name = "${var.env}_iam_instance_profile_for_eq_ecs"
-  role = "${aws_iam_role.eq_ecs.name}"
+resource "aws_iam_instance_profile" "ecs" {
+  name = "${var.env}_iam_instance_profile_for_${var.ecs_cluster_name}_ecs"
+  role = "${aws_iam_role.ecs.name}"
 }
 
-resource "aws_iam_role" "eq_ecs" {
-  name = "${var.env}_iam_instance_profile_for_eq_ecs"
+resource "aws_iam_role" "ecs" {
+  name = "${var.env}_iam_instance_profile_for_${var.ecs_cluster_name}_ecs"
 
   assume_role_policy = <<EOF
 {
@@ -23,7 +23,7 @@ resource "aws_iam_role" "eq_ecs" {
 EOF
 }
 
-data "aws_iam_policy_document" "eq_ecs" {
+data "aws_iam_policy_document" "ecs" {
   "statement" = {
     "effect" = "Allow"
 
@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "eq_ecs" {
     ]
 
     "resources" = [
-      "arn:aws:ecs:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster/${aws_ecs_cluster.eq.name}",
+      "arn:aws:ecs:eu-west-1:${data.aws_caller_identity.current.account_id}:cluster/${aws_ecs_cluster.default.name}",
     ]
   }
 
@@ -83,8 +83,8 @@ data "aws_iam_policy_document" "eq_ecs" {
   }
 }
 
-resource "aws_iam_role_policy" "eq_ecs" {
-  name   = "${var.env}_iam_instance_profile_for_eq_ecs"
-  role   = "${aws_iam_role.eq_ecs.id}"
-  policy = "${data.aws_iam_policy_document.eq_ecs.json}"
+resource "aws_iam_role_policy" "ecs" {
+  name   = "${var.env}_iam_instance_profile_for_${var.ecs_cluster_name}_ecs"
+  role   = "${aws_iam_role.ecs.id}"
+  policy = "${data.aws_iam_policy_document.ecs.json}"
 }

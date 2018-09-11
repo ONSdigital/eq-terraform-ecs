@@ -31,6 +31,10 @@ variable "ecs_aws_key_pair" {
   default     = ""
 }
 
+variable "ecs_cluster_name" {
+  description = "A unique name for the ecs cluster"
+}
+
 variable "ecs_cluster_min_size" {
   description = "ECS Cluster Minimum number of instances"
   default     = "3"
@@ -66,9 +70,9 @@ variable "private_route_table_ids" {
   description = "Route tables with route to NAT gateway"
 }
 
-variable "eq_gateway_ips" {
+variable "gateway_ips" {
   type        = "list"
-  description = "A list of External IP addresses for the EQ services"
+  description = "A list of External IP addresses for the service"
 }
 
 variable "ons_access_ips" {
