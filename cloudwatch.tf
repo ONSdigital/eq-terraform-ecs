@@ -1,5 +1,5 @@
-resource "aws_cloudwatch_metric_alarm" "eq_ecs_high_cpu" {
-  alarm_name          = "${var.env}-eq-ecs-high-cpu"
+resource "aws_cloudwatch_metric_alarm" "ecs_high_cpu" {
+  alarm_name          = "${var.env}-${var.ecs_cluster_name}-ecs-high-cpu"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
@@ -9,15 +9,15 @@ resource "aws_cloudwatch_metric_alarm" "eq_ecs_high_cpu" {
   threshold           = "40"
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.eq_ecs.name}"
+    AutoScalingGroupName = "${aws_autoscaling_group.ecs.name}"
   }
 
   alarm_description = "This metric monitors ECS Instance cpu utilization"
-  alarm_actions     = ["${aws_autoscaling_policy.eq_ecs_scaling.arn}"]
+  alarm_actions     = ["${aws_autoscaling_policy.ecs_scaling.arn}"]
 }
 
-resource "aws_cloudwatch_metric_alarm" "eq_ecs_low_cpu" {
-  alarm_name          = "${var.env}-eq-ecs-low-cpu"
+resource "aws_cloudwatch_metric_alarm" "ecs_low_cpu" {
+  alarm_name          = "${var.env}-${var.ecs_cluster_name}-ecs-low-cpu"
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "5"
   metric_name         = "CPUUtilization"
@@ -27,9 +27,9 @@ resource "aws_cloudwatch_metric_alarm" "eq_ecs_low_cpu" {
   threshold           = "20"
 
   dimensions {
-    AutoScalingGroupName = "${aws_autoscaling_group.eq_ecs.name}"
+    AutoScalingGroupName = "${aws_autoscaling_group.ecs.name}"
   }
 
   alarm_description = "This metric monitors ECS Instance cpu utilization"
-  alarm_actions     = ["${aws_autoscaling_policy.eq_ecs_scaling.arn}"]
+  alarm_actions     = ["${aws_autoscaling_policy.ecs_scaling.arn}"]
 }

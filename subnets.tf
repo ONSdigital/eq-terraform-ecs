@@ -6,7 +6,7 @@ resource "aws_subnet" "ecs_application" {
   availability_zone = "${var.availability_zones[count.index]}"
 
   tags {
-    Name        = "${var.env}-ecs-application-subnet-${count.index+1}"
+    Name        = "${var.env}-${var.ecs_cluster_name}-ecs-application-subnet-${count.index+1}"
     Environment = "${var.env}"
     Type        = "Application"
   }
