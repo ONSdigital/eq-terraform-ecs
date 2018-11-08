@@ -1,12 +1,12 @@
 resource "aws_security_group" "alb_waf_access" {
+  count       = "${var.create_internal_elb ? 1 : 0}"
   name        = "${var.env}-${var.ecs_cluster_name}-alb-access-from-waf"
   description = "Allow access to the ALB from the WAF"
   vpc_id      = "${var.vpc_id}"
-  count       = "${length(var.vpc_peer_cidr_block) > 0 ? 1 : 0}"
 
   ingress {
-    from_port   = "443"
-    to_port     = "443"
+    from_port   = "80"
+    to_port     = "80"
     protocol    = "tcp"
     cidr_blocks = "${var.vpc_peer_cidr_block}"
   }
@@ -78,6 +78,13 @@ resource "aws_security_group" "ecs_alb_access" {
     to_port     = "65535"
     protocol    = "tcp"
     cidr_blocks = ["${data.aws_subnet.public_subnet.*.cidr_block}"]
+  }
+
+  ingress {
+    from_port   = "0"
+    to_port     = "65535"
+    protocol    = "tcp"
+    cidr_blocks = ["${aws_subnet.ecs_application.*.cidr_block}"]
   }
 
   egress {

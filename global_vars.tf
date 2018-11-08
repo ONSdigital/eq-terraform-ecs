@@ -57,7 +57,7 @@ variable "public_subnet_ids" {
 variable "vpc_peer_cidr_block" {
   type        = "list"
   description = "The CIDR block of the peered VPC, optional"
-  default = []
+  default     = []
 }
 
 variable "ecs_application_cidrs" {
@@ -78,7 +78,7 @@ variable "gateway_ips" {
 variable "ons_access_ips" {
   type        = "list"
   description = "List of IP's or IP ranges to allow access from ONS"
-  default = []
+  default     = []
 }
 
 variable "certificate_arn" {
@@ -88,4 +88,14 @@ variable "certificate_arn" {
 variable "auto_deploy_updated_tags" {
   description = "Automatically deploy images when tags updated"
   default     = "false"
+}
+
+variable "create_external_elb" {
+  description = "Deploy an external load balancer"
+  default     = false
+}
+
+variable "create_internal_elb" {
+  description = "Deploy an internal load balancer"
+  default     = true
 }
