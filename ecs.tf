@@ -19,9 +19,7 @@ data "aws_ami" "amazon_ecs_ami" {
   }
 
   name_regex = ".+-amazon-ecs-optimized$"
-
 }
-
 
 resource "aws_launch_configuration" "ecs" {
   name_prefix          = "${var.env}-${var.ecs_cluster_name}-ecs-"

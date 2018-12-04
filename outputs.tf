@@ -6,11 +6,11 @@ output "aws_alb_dns_name" {
   value = "${aws_alb.default.dns_name}"
 }
 
-output "aws_alb_listener_arn" {
+output "aws_external_alb_listener_arn" {
   value = "${aws_alb_listener.default.arn}"
 }
 
-output "aws_alb_arn" {
+output "aws_external_alb_arn" {
   value = "${aws_alb.default.arn}"
 }
 
