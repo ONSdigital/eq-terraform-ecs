@@ -14,6 +14,14 @@ output "aws_external_alb_arn" {
   value = "${aws_alb.default.arn}"
 }
 
+output "aws_internal_alb_listener_arn" {
+  value = "${aws_alb_listener.internal.arn}"
+}
+
+output "aws_internal_alb_arn" {
+  value = "${aws_alb.internal.arn}"
+}
+
 output "ecs_subnet_ids" {
   value = "${aws_subnet.ecs_application.*.id}"
 }
