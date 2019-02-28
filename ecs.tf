@@ -12,11 +12,7 @@ data "template_file" "ecs_user_data" {
 
 data "aws_ami" "amazon_ecs_ami" {
   most_recent = true
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
+  owners = ["amazon"]
 
   name_regex = ".+-amazon-ecs-optimized$"
 }
