@@ -12,6 +12,7 @@ data "template_file" "ecs_user_data" {
 
 data "aws_ami" "amazon_ecs_ami" {
   most_recent = true
+  owners = ["amazon"]
 
   filter {
     name   = "owner-alias"
