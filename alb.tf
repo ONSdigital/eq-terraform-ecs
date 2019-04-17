@@ -38,8 +38,8 @@ resource "aws_alb" "internal" {
   count           = "${var.create_internal_elb ? 1 : 0}"
   name            = "${var.env}-${var.ecs_cluster_name}-internal-alb"
   internal        = true
-  security_groups = ["${join("", aws_security_group.alb_waf_access.*.id)}"]
-  subnets         = ["${aws_subnet.ecs_application.*.id}"]
+  security_groups = ["${aws_security_group.ecs_alb_access.id}", "${join("", aws_security_group.alb_waf_access.*.id)}"]
+  subnets         = ["${var.public_subnet_ids}"]
 
   tags {
     Name        = "${var.ecs_cluster_name}-internal-alb"
