@@ -13,4 +13,4 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Lint Terraform
-        uses: actionshub/terraform-lint@$TAG
+        uses: actionshub/terraform-lint@main
