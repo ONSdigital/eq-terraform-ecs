@@ -6,8 +6,11 @@ jobs:
   linting:
     runs-on: ubuntu-latest
 
+    env:
+      TAG: ${{ github.HEAD_REF }}
+
     steps:
       - name: Check out code
         uses: actions/checkout@v2
       - name: Lint Terraform
-        uses: actionshub/terraform-lint@${{ github.HEAD_REF }}
+        uses: actionshub/terraform-lint@$TAG
