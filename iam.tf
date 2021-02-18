@@ -24,7 +24,7 @@ EOF
 }
 
 data "aws_iam_policy_document" "ecs" {
-  "statement" = {
+  statement = {
     "effect" = "Allow"
 
     "actions" = [
