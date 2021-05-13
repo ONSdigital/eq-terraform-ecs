@@ -1,0 +1,16 @@
+name: terraform-lint
+
+on: [pull_request]
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+
+    env:
+      TAG: ${{ github.HEAD_REF }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Lint Terraform on branch $TAG
+        uses: actionshub/terraform-lint@main
